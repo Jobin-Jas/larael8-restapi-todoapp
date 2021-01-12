@@ -20,7 +20,7 @@ use App\Http\Controllers\TodoController;
 Route::group(['middleware' => 'auth:api'], function () {
     Route::get("task", [TodoController::class,'task']);
     Route::post("addtask", [TodoController::class,'addtask']);
-    Route::put("update/{task_id}", [TodoController::class,'update']);
+    Route::put("update", [TodoController::class,'update']);
     Route::delete("delete/{task_id}", [TodoController::class,'delete']); 
 });
 Route::post('/register',[UserController::class,'register']);
