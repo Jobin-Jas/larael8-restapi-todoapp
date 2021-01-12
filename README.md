@@ -30,5 +30,4 @@ required.
 
 #Notcompleted
 -
- 1.patch  method error
- 2.image upload error
+ 1.image upload error
