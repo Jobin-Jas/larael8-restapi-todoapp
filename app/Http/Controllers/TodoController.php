@@ -54,21 +54,33 @@ class TodoController extends Controller
         }
 
 
-        public function update(Request $req ,$task_id){
-           $data=Task::findOrFail($task_id);
-           $validator=Validator::make($req->all(),
-            [
-                "title"=>"required",
-                "discription"=>"required",
-            ]
-          );
-          if($validator->fails()) {
-            return response()->json(["validation_errors" => $validator->errors()]);
-         }
-        else{
-            $data->update($req->all());
-             return response()->json(["success" =>"success"]);
-         }
+//         public function update(Request $req ,$task_id){
+//            $data=Task::findOrFail($task_id);
+//            $validator=Validator::make($req->all(),
+//             [
+//                 "title"=>"required",
+//                 "discription"=>"required",
+//             ]
+//           );
+//           if($validator->fails()) {
+//             return response()->json(["validation_errors" => $validator->errors()]);
+//          }
+//         else{
+//             $data->update($req->all());
+//              return response()->json(["success" =>"success"]);
+//          }
+//         }
+public function update(Request $req){
+            $data=Task::find($req->id);
+            $data->title=$req->title;
+            $data->discription=$req->discription;
+            $data->status=$req->status;
+            $result=$data->save();
+            if($result){
+                return ["result"=>"Data has been Updated"];
+            }else{
+                return["result"=>"Data not Updated"];
+            }
         }
 
 
