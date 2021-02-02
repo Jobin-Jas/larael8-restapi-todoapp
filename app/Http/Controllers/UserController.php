@@ -2,18 +2,19 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
+use App\Http\Requests\LoginRequest;
+use App\Http\Requests\RegisterRequest;
 use Illuminate\Support\Facades\Auth;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
-use Validator;
 
 class UserController extends Controller
 {
-    //
-    public function login(Request $req)
+
+    public function login(LoginRequest $request)
     {
-        $credentials = $req->only(['email', 'password']);
+        $credentials = $request->only(['email', 'password']);
+
         if (Auth::attempt($credentials)) {
             $user = Auth::user();
             $response = [];
@@ -25,28 +26,14 @@ class UserController extends Controller
 
             return response()->json($response, 200);
         } else {
-            /**
-             * Responses should be given properly
-             */
             return response()->json(['error' => 'unauthenticated'], 401);
         }
     }
-    public function register(Request $req)
-    {
-        $validate = Validator::make(
-            $req->all(),
-            [
-                'name' => 'required',
-                'email' => 'required|email',
-                'password' => 'required|alpha_num|min:6',
-            ]
-        );
-        if ($validate->fails()) {
-            return response()->json(['validation_error' => $validate->errors()]);
-        }
 
-        // $req->all() may lead to security issues
-        $input = $req->only(['email', 'name', 'password']);
+
+    public function register(RegisterRequest $request)
+    {
+        $input = $request->only(['email', 'name', 'password']);
         $input['password'] = Hash::make($input['password']);
         $user = User::create($input);
 
@@ -57,16 +44,12 @@ class UserController extends Controller
         ], 200);
     }
 
-    /**
-     * use camelCase for function names
-     * and snake_case for variables
-     */
     public function taskList()
     {
         $user = Auth::user();
         $response = [
             'status' => 'ok',
-            'tasks' => $user->tasks
+            'tasks' => $user->tasks()->get()
         ];
         return response()->json($response);
     }
