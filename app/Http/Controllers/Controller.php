@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Traits\ResponseTraits;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Foundation\Validation\ValidatesRequests;
@@ -11,13 +12,6 @@ class Controller extends BaseController
 {
     use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
 
-    protected function successResponse($data, $status_code = 200)
-    {
-        return response()->json($data, $status_code);
-    }
+    use ResponseTraits;
 
-    protected function errorResponse($data, $status_code = 400)
-    {
-        return response()->json($data, $status_code);
-    }
 }

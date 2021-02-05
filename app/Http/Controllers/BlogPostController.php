@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\CreateBlogPostRequest;
 use App\Models\BlogPost;
+use Illuminate\Validation\UnauthorizedException;
 
 class BlogPostController extends Controller
 {
@@ -42,7 +43,13 @@ class BlogPostController extends Controller
 
     public function destroy(BlogPost $blogPost)
     {
+        // if(auth()->user()->id !== $blogPost->user_id){
+        //     throw new UnauthorizedException();
+        // }
+
         $blogPost->delete();
+
+
         return $this->successResponse(
             ["message" => "deleted successfully"]
         );
